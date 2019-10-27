@@ -35,7 +35,10 @@ public class TargetDirection {
 
     // Calculation functions
     private static double getAbsoluteHeading() {
-        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        Orientation angles;
+        synchronized (imu) {
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        }
         return errorCorrecter(-angles.firstAngle);
     }
     private static double calculateFieldHeading() {
