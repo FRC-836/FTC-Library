@@ -23,6 +23,8 @@ public class PID_Controller{
     private double dValue = 0.0;
     private double DGAIN;
 
+    private boolean firstResetFrame;
+
     public PID_Controller(double PGAIN, double IGAIN, double DGAIN){
         this.runtime = new ElapsedTime();
         resetPID();
@@ -39,6 +41,9 @@ public class PID_Controller{
         lastError = error;
         lastTime = time;
         error = setpoint - input;
+        if (firstResetFrame)
+            lastError = error;
+        firstResetFrame = false;
         time = runtime.seconds();
         pValue = PGAIN * error;
         iValue += IGAIN * (lastError + error) * (0.5) * (time - lastTime);
@@ -53,6 +58,7 @@ public class PID_Controller{
     public void resetPID(double startingIValue) {
         runtime.reset();
         iValue = startingIValue;
+        firstResetFrame = true;
     }
 
     public void displayCurrentPID(Telemetry telemetry) {
