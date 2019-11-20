@@ -41,13 +41,14 @@ public class PID_Controller{
         lastError = error;
         lastTime = time;
         error = setpoint - input;
+        time = runtime.seconds();
         if (firstResetFrame)
             lastError = error;
-        firstResetFrame = false;
-        time = runtime.seconds();
+        else
+            iValue += IGAIN * (lastError + error) * (0.5) * (time - lastTime);
         pValue = PGAIN * error;
-        iValue += IGAIN * (lastError + error) * (0.5) * (time - lastTime);
         dValue = DGAIN * (error - lastError) / (time - lastTime);
+        firstResetFrame = false;
         return getPID();
     }
 
