@@ -62,4 +62,8 @@ public class TargetDirection {
             heading = 180f - ((180f - heading) % 360f);
         return heading;
     }
+
+    public double getFocusHeading() {
+        return fieldHeadingAtTargetZero;
+    }
 }
