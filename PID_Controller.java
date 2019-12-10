@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.utilities;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -23,6 +23,8 @@ public class PID_Controller{
     private double dValue = 0.0;
     private double DGAIN;
 
+    private boolean firstResetFrame;
+
     public PID_Controller(double PGAIN, double IGAIN, double DGAIN){
         this.runtime = new ElapsedTime();
         resetPID();
@@ -40,9 +42,13 @@ public class PID_Controller{
         lastTime = time;
         error = setpoint - input;
         time = runtime.seconds();
+        if (firstResetFrame)
+            lastError = error;
+        else
+            iValue += IGAIN * (lastError + error) * (0.5) * (time - lastTime);
         pValue = PGAIN * error;
-        iValue += IGAIN * (lastError + error) * (0.5) * (time - lastTime);
         dValue = DGAIN * (error - lastError) / (time - lastTime);
+        firstResetFrame = false;
         return getPID();
     }
 
@@ -53,6 +59,7 @@ public class PID_Controller{
     public void resetPID(double startingIValue) {
         runtime.reset();
         iValue = startingIValue;
+        firstResetFrame = true;
     }
 
     public void displayCurrentPID(Telemetry telemetry) {

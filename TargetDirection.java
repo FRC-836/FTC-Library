@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.utilities;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
@@ -35,7 +35,10 @@ public class TargetDirection {
 
     // Calculation functions
     private static double getAbsoluteHeading() {
-        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        Orientation angles;
+        synchronized (imu) {
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        }
         return errorCorrecter(-angles.firstAngle);
     }
     private static double calculateFieldHeading() {
@@ -58,5 +61,9 @@ public class TargetDirection {
         else if (heading < -180f)
             heading = 180f - ((180f - heading) % 360f);
         return heading;
+    }
+
+    public double getFocusHeading() {
+        return fieldHeadingAtTargetZero;
     }
 }
