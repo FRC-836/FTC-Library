@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.utilities;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -19,9 +21,24 @@ public class TargetDirection {
         this.fieldHeadingAtTargetZero = fieldHeadingAtTargetZero;
     }
 
-    // Function to be called before using a TargetDirection object
-    public static void setImu(BNO055IMU imu) {
-        TargetDirection.imu = imu;
+    public static void setupImu(HardwareMap hardwareMap, boolean forceOverride) {
+        if (imu == null || forceOverride) {
+            imu = hardwareMap.get(BNO055IMU.class, "imu");
+            BNO055IMU.Parameters imuParameters = new BNO055IMU.Parameters();
+            imuParameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+            imuParameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+            imuParameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+            imuParameters.loggingEnabled = true;
+            imuParameters.loggingTag = "IMU";
+            imuParameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+            imuParameters.temperatureUnit = BNO055IMU.TempUnit.FARENHEIT;
+
+            imu.initialize(imuParameters);
+        }
+    }
+
+    public static void setupImu(HardwareMap hardwareMap) {
+        setupImu(hardwareMap, false);
     }
 
     public static void setCurrentHeading(double robotsCurrentHeading){
