@@ -67,7 +67,7 @@ public class TargetDirection {
         return fieldHeadingAtTargetZero;
     }
 
-    public static TargetDirection average(TargetDirection t1, TargetDirection t2) {
-        return makeTargetAtFieldPosition((t1.getFocusHeading() + t2.getFocusHeading()) / 2);
+    public static TargetDirection bisect(TargetDirection t1, TargetDirection t2) {
+        return makeTargetAtFieldPosition(errorCorrecter(t1.getFocusHeading() - t2.getFocusHeading()) / 2.0 + t2.getFocusHeading());
     }
 }
