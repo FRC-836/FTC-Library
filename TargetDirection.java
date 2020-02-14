@@ -68,6 +68,12 @@ public class TargetDirection {
     }
 
     public static TargetDirection bisect(TargetDirection t1, TargetDirection t2) {
-        return makeTargetAtFieldPosition(errorCorrecter(t1.getFocusHeading() - t2.getFocusHeading()) / 2.0 + t2.getFocusHeading());
+        return makeTargetAtFieldPosition(errorCorrecter(t2.getFocusHeading() + errorCorrecter(t1.getFocusHeading() - t2.getFocusHeading()) / 2.0));
+    }
+    public TargetDirection mirrorAbout(TargetDirection mirrorLine) {
+        return makeTargetAtFieldPosition(errorCorrecter(fieldHeadingAtTargetZero + errorCorrecter(mirrorLine.getFocusHeading() - getFocusHeading()) * 2.0));
+    }
+    public TargetDirection mirrorAbout(double mirrorLine) {
+        return makeTargetAtFieldPosition(errorCorrecter(fieldHeadingAtTargetZero + errorCorrecter(mirrorLine - getFocusHeading()) * 2.0));
     }
 }
