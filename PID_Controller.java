@@ -72,4 +72,8 @@ public class PID_Controller{
     private double getPID() {
         return pValue + iValue + dValue;
     }
+
+    public double getSetpoint() {
+        return setpoint;
+    }
 }
