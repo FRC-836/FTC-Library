@@ -55,7 +55,7 @@ public class TargetDirection {
     public static TargetDirection makeTargetToRobotsLeft(double degreesToLeft) { return new TargetDirection(calculateFieldHeading() - degreesToLeft); }
 
     // Error correction to make everything on the range -180 to +180
-    private static double errorCorrecter(double heading){
+    public static double errorCorrecter(double heading){
         if (heading > 180f)
             heading = ((heading + 180f) % 360f) - 180f;
         else if (heading < -180f)
@@ -65,5 +65,15 @@ public class TargetDirection {
 
     public double getFocusHeading() {
         return fieldHeadingAtTargetZero;
+    }
+
+    public static TargetDirection bisect(TargetDirection t1, TargetDirection t2) {
+        return makeTargetAtFieldPosition(errorCorrecter(t2.getFocusHeading() + errorCorrecter(t1.getFocusHeading() - t2.getFocusHeading()) / 2.0));
+    }
+    public TargetDirection mirrorAbout(TargetDirection mirrorLine) {
+        return makeTargetAtFieldPosition(errorCorrecter(fieldHeadingAtTargetZero + errorCorrecter(mirrorLine.getFocusHeading() - getFocusHeading()) * 2.0));
+    }
+    public TargetDirection mirrorAbout(double mirrorLine) {
+        return makeTargetAtFieldPosition(errorCorrecter(fieldHeadingAtTargetZero + errorCorrecter(mirrorLine - getFocusHeading()) * 2.0));
     }
 }
