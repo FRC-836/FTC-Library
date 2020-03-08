@@ -3,6 +3,7 @@ package org.firstinspires.ftc.utilities;
 public class Angle {
     private static final double TAU = 2 * Math.PI;
     private double radians;
+    private Unit printUnit;
 
     public enum Unit {
         DEGREES,
@@ -24,6 +25,17 @@ public class Angle {
             default:
                 throw new IllegalArgumentException("Angle: Unknown Unit type provided");
         }
+
+        setPrintUnit(type);
+    }
+
+    @Override
+    public String toString() {
+        return getValue(printUnit) + " " + printUnit.toString();
+    }
+
+    public void setPrintUnit(Unit printUnit) {
+        this.printUnit = printUnit;
     }
 
     public static Angle radians(double value) {
