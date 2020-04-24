@@ -37,6 +37,11 @@ public class PID_Controller{
         this.setpoint = newSetpoint;
     }
 
+    public double getLastError()
+    {
+        return lastError;
+    }
+
     public double update(double input){
         lastError = error;
         lastTime = time;
